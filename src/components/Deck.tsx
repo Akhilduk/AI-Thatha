@@ -11,7 +11,6 @@ export function Deck({ onReady }: DeckProps) {
   const [progress, setProgress] = useState(0);
   const [ready, setReady] = useState(false);
   const x = useMotionValue(0);
-
   const cards = useMemo(() => Array.from({ length: 14 }, (_, i) => i), []);
 
   return (

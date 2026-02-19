@@ -25,10 +25,29 @@ export interface ReadingSection {
   ml: string;
 }
 
+export interface ReadingMetadata {
+  tone: "cinematic_kerala_jyothisham";
+  luckyColor: string;
+  luckyTimeWindow: string;
+  dobUsed: boolean;
+}
+
 export interface ReadingResult {
+  cardId: string;
   cards: DrawnCard[];
   past: ReadingSection;
   present: ReadingSection;
   future: ReadingSection;
   behaviour: ReadingSection;
+  advice: ReadingSection;
+  funnyParrotLines: { en: string[]; ml: string[] };
+  metadata: ReadingMetadata;
+}
+
+export interface ReadingApiPayload {
+  name: string;
+  dob: string;
+  selectedCardId: string;
+  includeImageForAi?: boolean;
+  imageBase64?: string | null;
 }
