@@ -1,62 +1,46 @@
-# AI Thatha Tarot
+# Jyothisham Parrot Tarot
 
-Cinematic Kerala-themed tarot web app with a 3D interactive parrot, shuffle/draw ritual, bilingual English + Malayalam readings, local-only optional camera capture, Web Speech narration, and downloadable share image.
+Interactive Kerala-style tarot experience built with Next.js 14, TypeScript, Tailwind, Framer Motion, and react-three-fiber.
 
-## Stack
+## Features
 
-- Next.js 14 (App Router) + TypeScript
-- TailwindCSS
-- Framer Motion
-- React Three Fiber + drei + three
-- Web Speech API (no external APIs, no backend DB)
+- Cinematic landing and 3D parrot scene
+- Name + DOB input
+- Optional local camera capture with explicit upload consent toggle
+- Shuffle ritual and parrot card pick flow
+- EN + മലയാളം reading blocks (past, present, future, behaviour, advice)
+- Funny parrot commentary lines
+- Server route for OpenAI Responses API with strict JSON parsing + retry
+- Server route for OpenAI TTS (`gpt-4o-mini-tts`) with browser Web Speech fallback
+- Session save to `localStorage` + share card image download
 
-## Run
+## Setup
 
 ```bash
 npm install
+cp .env.example .env.local
 npm run dev
 ```
 
-Open `http://localhost:3000`.
+Open http://localhost:3000
 
-## Flow
+## Environment variables
 
-1. Landing cinematic intro + parrot scene
-2. Setup: name, language, mood/focus, optional camera, seeded vs true random
-3. Shuffle by dragging deck
-4. Draw Past/Present/Future + computed Behaviour
-5. Reveal with subtitles and speech
-6. Results with tone toggles and share image export
+- `OPENAI_API_KEY` (optional, enables AI reading + TTS)
+- `OPENAI_READING_MODEL` (optional, default `gpt-4o-mini`)
 
-## Data
+Without API key, app falls back to local deterministic reading + browser speech.
 
-Tarot cards live in `src/data/tarot.ts`.
+## API routes
 
-- Includes complete 22 Major Arcana in English + Malayalam
-- Shape:
-  - `id`
-  - `name_en`, `name_ml`
-  - `meaning_upright_en`, `meaning_reversed_en`
-  - `meaning_upright_ml`, `meaning_reversed_ml`
-  - `keywords_en[]`, `keywords_ml[]`
+- `POST /api/reading`
+  - input: `{ name, dob, selectedCardId, includeImageForAi, imageBase64 }`
+  - output: structured bilingual reading JSON
+- `POST /api/tts`
+  - input: `{ text, language }`
+  - output: `{ fallback }` or base64 MP3 payload
 
-To add more cards, append items with the same shape and update draw logic if you want minor arcana suit-specific behavior.
+## Replacing parrot model
 
-## Malayalam TTS Notes
-
-Malayalam voice availability depends on OS/browser voice packs.
-
-- If Malayalam voice exists, narration uses `ml-IN`
-- If unavailable, app speaks English fallback and still shows Malayalam subtitles
-
-## Privacy
-
-- Camera is optional
-- Captured image remains in browser memory only
-- No image upload or server storage
-
-## Accessibility
-
-- Keyboard-usable controls
-- Subtitles always shown
-- Reduced motion respects `prefers-reduced-motion`
+Current app uses procedural low-poly mesh parrot for zero-asset startup.
+To switch to a GLB, place model at `public/models/parrot.glb` and update `ParrotScene` loader logic.
